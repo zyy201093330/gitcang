@@ -17,6 +17,7 @@ export default {
     * getremmendersongs({payload},{call,put}){
         let songs = yield call(getremmendersongs,payload)
         console.log(songs.data)
+
         yield put({
           type:'daylist',
           payload:songs.data.recommend

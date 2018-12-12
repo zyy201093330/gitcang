@@ -34,3 +34,8 @@ export function getsongsurl(idx){
 export function getdetail(idx){
     return request(`${host}/song/detail?ids=${idx}`)
 }
+
+//获取歌词
+export function getlyric(idx){
+    return request(`${host}/lyric?id=${idx}`)
+}

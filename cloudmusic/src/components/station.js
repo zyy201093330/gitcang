@@ -14,9 +14,9 @@ class Station extends React.Component{
                 <div className="lunbo">
                     <Carousel autoplay>
                         {
-                        list.map((v,i)=>{
-                            return <div className="lunbo_div" key={i}><img src={v.imageUrl}></img></div>
-                        })
+                            list.map((v,i)=>{
+                                return <div className="lunbo_div" key={i}><img src={v.imageUrl}></img></div>
+                            })
                         }  
                     </Carousel>  
                 </div>

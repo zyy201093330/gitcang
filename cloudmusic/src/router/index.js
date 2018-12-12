@@ -6,6 +6,7 @@ import LoginPage from '../routes/LoginPage';
 import MainPage from '../routes/MainPage';
 import Tellogin from '../routes/account/tellogin'
 import Play from '../routes/discover/play'
+import DistinguishPage from '../routes/DistinguishPage'
 
 // 引入二级路由
 import AccountPage from '../routes/account/Index';
@@ -29,6 +30,10 @@ export default {
   {
     path:'/play/:id?',
     component:Play
+  },
+  {
+    path:'/DistinguishPage/:id?',
+    component:DistinguishPage
   },
   {
     path: '/main',

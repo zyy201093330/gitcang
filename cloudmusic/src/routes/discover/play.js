@@ -1,10 +1,15 @@
 import React from 'react'
 import {connect} from 'dva'
 import {Link} from 'dva/router'
+import {Carousel } from 'antd-mobile'
 import style from './play.scss'
 import {formaTim} from '../../utils/index'
 
+import Lyric from '../../components/lyric'
+import Audioprocess from '../../components/audioprocess'
+
 @connect((state)=>{
+    console.log(state)
     return state.example
 },(dispatch)=>{
     return {
@@ -20,6 +25,24 @@ import {formaTim} from '../../utils/index'
                 type:'example/changePlay',
                 payload
             })
+        },
+        getUrl: id=>{
+            dispatch({
+                type: 'examle/getUrl',
+                payload: id
+            })
+        },
+        changeMode: ()=>{
+            dispatch({
+                type: 'example/changeMode',
+            })
+        },
+        getlyric:(payload)=>{
+            console.log(payload)
+            dispatch({
+                type:'example/getlyric',
+                payload
+            })
         }
     }
 })
@@ -33,13 +56,40 @@ class Play extends React.PureComponent{
             isflag:true
         }
     }
+    // componentWillReceiveProps(nextProps){
+    //     if (nextProps.id != this.props.id){
+    //       this.props.getlyric(nextProps.id);
+    //     }
+    // }
+    // static getDerivedStateFromProps(props, state){
+    //     // 只要判断下一次的id和上一次的id不一样就要重新获取歌词
+    //     if (props.id != state.id && props.id){
+    //         console.log(props.id)
+    //       props.getlyric(props.id);
+    //     }
+    //     return {
+    //       id: props.id
+    //     }
+    //   }
     componentDidMount(){
         this.props.getsongsurl(this.props.match.params.id)
+        let id = this.props.match.params.id;
+        this.props.getUrl(id);
     }
     tiemupdate(){
         let progresstime = this.refs.audio.currentTime/this.refs.audio.duration*100;
         this.setState({
             progresstime
+        },()=>{
+            if (this.state.progresstime == 100){
+                this.props.changePlay('next');
+                console.log(this.props.playList)
+                if (!this.props.playList.length){
+                  this.refs.audio.pause();
+                  this.refs.audio.currentTime = 0;
+                  this.refs.audio.play();
+                }
+            }
         })
     }
     get duration(){
@@ -60,7 +110,6 @@ class Play extends React.PureComponent{
         },()=>{
             this.refs.audio.pause()
         })
-        
     }
     touchMove(e){
         let touch = e.touches[0],
@@ -94,11 +143,27 @@ class Play extends React.PureComponent{
     changePlay(type){
         this.props.changePlay(type)
     }
+    get mode(){
+        return this.props.mode==1?'单曲循环':this.props.mode==2?'随机播放':'列表循环'
+    }
+    changeMode(){
+        this.props.changeMode();
+    }
     render(){
-        let {songsurllist} = this.props;
+        let {songsurllist,playList,url,picUrl} = this.props;
         return (
             <div className="play">
-                <div><img src={songsurllist.picurl} className={this.state.isflag?style.imgpics:style.imgpic} /></div>
+             <Carousel
+                    autoplay={false}
+                    infinite
+                    beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
+                    afterChange={index => console.log('slide to', index)}
+                >
+                <div><img src={picUrl} className={this.state.isflag?style.imgpics:style.imgpic} /></div>
+                
+                <Audioprocess audio={this.refs.audio} />
+                </Carousel>
+                
                 <div className="progressbox" 
                     onTouchStart={this.touchStart.bind(this)}
                     onTouchMove={this.touchMove.bind(this)}
@@ -114,8 +179,10 @@ class Play extends React.PureComponent{
                     <p onClick={()=>{this.changePlay('prev')}}><img src={require('../../assets/shangyishou.png')} /></p>
                     <p onClick={this.changeState.bind(this)}><img src={this.state.isflag?require('../../assets/pause.png'):require('../../assets/play.png')} /></p>
                     <p onClick={()=>{this.changePlay('next')}}><img src={require('../../assets/xiayishou.png')} /></p>
+                    <button onClick={()=>this.changeMode()}>{this.mode}</button>
                 </div>
-                {songsurllist.url?<audio src={songsurllist.url} autoPlay ref="audio" onTimeUpdate={()=>{this.tiemupdate()}}></audio>:null}
+                <Lyric lyric={this.props.datalyric} currentTime={this.refs.audio && this.refs.audio.currentTime} />
+                {this.props.url?<audio src={url} autoPlay crossOrigin="anonymous" ref="audio" onTimeUpdate={()=>{this.tiemupdate()}}></audio>:null}
             </div>
         )
     }

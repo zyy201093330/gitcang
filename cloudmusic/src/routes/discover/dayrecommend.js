@@ -4,9 +4,8 @@ import {connect} from 'dva'
 
 @connect(state => {
     console.log(state)
-    return {
-        dayplaylist:state.dayrecommend
-    }
+    return  state.dayremmend
+  
 },dispatch => {
     return {
         getremmendersongs:payload => {
@@ -26,6 +25,13 @@ class Dayrecommend extends React.PureComponent{
     }
     render(){
         let {dayplaylist} = this.props;
+        console.log(dayplaylist)
+        if(dayplaylist){
+            window.localStorage.setItem('daylist',JSON.stringify(dayplaylist))
+        }
+       
+        let dayplaylists = JSON.parse(window.localStorage.getItem('daylist'))
+        console.log(dayplaylists)
         return (
             <div className="dayrecommend">
                 <header className="dr_header">
@@ -46,18 +52,25 @@ class Dayrecommend extends React.PureComponent{
                         </p>
                     </div>
                 </div>
-                <div className="playlist">
-                    <ul>
+                
+                    <ul className="playlist">
                         {
-                            dayplaylist.map((v,i)=>{
+                            dayplaylists.map((v,i)=>{
                                 return <li key={i}>
-                                    <img src={v.album.picUrl}></img>
+                                    <p>
+                                        <img src={v.album.picUrl} />
+                                        <span>{v.album.name}</span><br />
+                                        <span>{v.artists[0].name}--{v.album.name}</span>
+                                    </p>
+                                    <p>
+                                        <img src={require('../../assets/play.png')} />
+                                    </p>  
                                 </li>
                             })
                         }
                     </ul>
                    
-                </div>
+            
             </div>
         )
     }
