@@ -140,7 +140,6 @@ export default {
       })
     },
     * distinguishSong({payload},{call,put}){
-      console.log(payload)
       let songList = [],ids = [];
       while(true){
         let id = Math.floor(Math.random()*payload.length);
@@ -151,7 +150,6 @@ export default {
           }
         }
       }
-      console.log('ids',ids)
       let responses = yield call(getsongsurl, ids.join(','));
       let details = yield call(getdetail, ids.join(','));
       responses = responses.data.data;
@@ -162,8 +160,6 @@ export default {
           url: responses.filter(value=>value.id==item.id)[0].url
         })
       })
-
-      console.log('songList...', songList);
       yield put({
         type: 'updateState',
         payload: {
@@ -225,8 +221,7 @@ export default {
       newState.url = state.playList[newState.current].info.url;
       newState.info = state.playList[newState.current].info;
       newState.detail = state.playList[newState.current].detail;
-      newState.picUrl = state.playList[newState.current].detail.al.picUrl
-      console.log(newState.id)
+      newState.picUrl = state.playList[newState.current].detail.al.picUrl;
       return newState;
     },
     changeMode(state){
