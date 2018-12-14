@@ -7,6 +7,9 @@ class Recommend extends React.Component{
     constructor(props){
         super(props)
     }
+    click(){
+        window._hmt.push(['_trackEvent','网易云音乐','按钮点击','搜索按钮'])
+    }
     render(){
         let {list,resourcelist} = this.props;
         return(
@@ -29,7 +32,7 @@ class Recommend extends React.Component{
                         <dt><img src={require('../assets/yinpin.png')}></img></dt>
                         <dd><NavLink to="/main/dayrecommend">每日推荐</NavLink> </dd>
                     </dl>
-                    <dl>
+                    <dl onClick={this.click.bind(this)}>
                         <dt><img src={require('../assets/yinpin.png')}></img></dt>
                         <dd><NavLink to="/main/seach">歌单</NavLink></dd>
                     </dl>

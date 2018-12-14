@@ -1,6 +1,7 @@
 import request from '../utils/request'
 
-const host = /localhost/.test(window.location.host)?'http://123.206.55.50:14000':'';
+//const host = /localhost/.test(window.location.host)?'http://123.206.55.50:14000':'http://123.206.55.50:14000';
+const host = /localhost/.test(window.location.host)?'http://123.206.55.50:14000':'http://123.206.55.50:14000';
 
 //登录接口
 
