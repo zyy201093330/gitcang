@@ -11,28 +11,21 @@
             <div class="image">
                 <img src="http://169.254.125.23:8081/banner@3x.png" />
             </div>
-            <div class="photo">
-                <dl>
-                    <dt></dt>
-                    <dd>身份证正面</dd>
-                </dl>
-                <dl>
-                    <dt></dt>
-                    <dd>身份证反面</dd>
-                </dl>
-                <dl>
-                    <dt></dt>
-                    <dd>驾驶证正页</dd>
-                </dl>
-                <dl>
-                    <dt></dt>
-                    <dd>驾驶证副页</dd>
-                </dl>
-                <dl>
-                    <dt></dt>
-                    <dd>白底半身照</dd>
-                </dl>
-            </div>
+            <ul class="ulists">
+                <li v-for="(item, index) in list" :key="index" @click="click(index)">
+                <img v-if="item.src" :src="item.src">
+                <img v-else class="add" :src="addImg">
+                <p>{{item.desc}}</p>
+                </li>
+                <div v-show="showMask" class="mask">
+                <img :src="current.demo">
+                <div>
+                    <button @click="upload(1)">拍照</button>
+                    <button @click="upload(2)">相册</button>
+                    <button @click="cancel">取消</button>
+                </div>
+                </div>
+            </ul>
             <ul class="ulist">
                 <li>
                     <p>服务类型</p>
@@ -78,6 +71,9 @@
 import Vue from 'vue'
 import {Picker} from 'mint-ui'
 import 'mint-ui/lib/style.css';
+import {mapState, mapMutations} from 'vuex';
+import {uploadImg} from '@/api/index';
+import add from '@/assets/add.png';
 Vue.component(Picker.name, Picker)
 export default {
     data(){
@@ -92,13 +88,26 @@ export default {
             ],
             flag:false,
             text:'',
-            text1:''
+            text1:'',
+            current:{},
+            showMask:false
         }
     },
     components:{
 
     },
+    computed:{
+        ...mapState({
+            list:state=>state.upload.list
+        }),
+        addImg(){
+            return add
+        }
+    },
     methods:{
+        ...mapMutations({
+            updataList: 'upload/upadteList'
+        }),
         onValuesChange(picker, values) {
             console.log(values)
             if (values[0] > values[1]) {
@@ -112,12 +121,38 @@ export default {
         },
         replaceClick(){
              
+        },
+        click(index){
+            this.current = this.list[index];
+            this.showMask = true;
+        },
+        cancel(){
+            this.showMask = false;
+        },
+        upload(type){
+            uploadImg(type).then(res=>{
+                if (res.code == 0){
+                    let src = '';
+                    if (/picture.eclicks.cn/.test(res.data.image01)) {
+                        src = res.data.image01.replace('http://', '//');
+                    } else {
+                        src = '//picture.eclicks.cn/' + res.data.image01;
+                    }
+                    this.updataList({
+                        src,
+                        index: this.list.findIndex(item=>item==this.current)
+                    })
+                }else{
+                    alert(res.msg);
+                }
+            })
         }
+        
     }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .show{
     display: block;
 }
@@ -168,34 +203,12 @@ export default {
 .image{
     width:100%;
     height:120px;
-    background: rgba(0,0,0,.5)
+    background: rgba(0,0,0,.5);
+    margin-bottom:10px;
 }
 .image>img{
     width:100%;
     height:100%;
-}
-.photo{
-    width:100%;
-    height:auto;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding:20px 0;
-    background: #fff;
-}
-.photo>dl{
-    width:17%;
-    height:auto;
-}
-.photo dt{
-    width:30px;
-    height: 30px;
-    border:1px solid #ccc;
-    border-radius: 10px;
-    margin:0 auto;
-}
-.photo dd{
-    margin-top:5px;
 }
 .ulist{
     width:100%;
@@ -243,4 +256,76 @@ export default {
     bottom:0px;
     z-index: 100;
 }
+
+
+.ulists{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.ulists>li{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img{
+    border-radius: .15rem;
+    width: .9rem;
+    height: .7rem;
+    border: 1px solid #c0c0c0;
+  }
+  p{
+    font-size: .26rem;
+    padding: .1rem .3rem;
+    text-align: center;
+  }
+}
+.add{
+  width: .5rem;
+  height: .5rem;
+  padding: .1rem .2rem;
+}
+.mask{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0, .5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  img{
+    width: 90%;
+    margin-top: 20%;
+  }
+  div{
+    display: flex;
+    width: 90%;
+    flex-direction: column;
+    align-items: center;
+    button{
+      width: 100%;
+      height: .9rem;
+      font-size: .4rem;
+      letter-spacing: .1rem;
+      border-radius: .15rem;
+      color: #3aafc0;
+    }
+    button:first-child{
+      border-radius: .15rem .15rem 0 0;
+    }
+    button:nth-child(2){
+      border-radius: 0 0 .15rem .15rem;
+    }
+    button:last-child{
+      margin: .15rem 0;
+    }
+  }
+}
 </style>
+
+
+
+    

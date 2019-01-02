@@ -66,15 +66,13 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
-      },{
-        test:'///.(jpg|png|gif|svg)$/',
-        use: ['url-loader?limit=8192&name=./[name].[ext]']
       }
     ]
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.runtime.esm.js',
+      '@': path.resolve(__dirname, './src')
     },
     extensions: ['*', '.js', '.vue', '.json']
   },

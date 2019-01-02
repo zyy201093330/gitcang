@@ -2,7 +2,6 @@
     <div class="bigdata">
         <div class="header">
             <div class="chelun">车轮</div>
-           
             <nav :class="flag == true?'show nav':'hide nav'" >
                 <span>产品</span>
                 <span>关于我们</span>
@@ -13,18 +12,23 @@
                 <span>登录/注册</span>
             </nav>
             <div class="navlist"  @click="listShow">列表</div>
-            
         </div>
         <div class="images"><img src="http://localhost:8081/bigdata.png" /></div>
     </div>
 </template>
-
 <script>
+
 export default {
     data(){
         return {
             flag:false
         }
+    },
+  
+    mounted(){
+        window.addEventListener("scroll", function(a){
+            console.log('scrolling');
+        })
     },
     methods:{
         listShow(){
@@ -44,7 +48,10 @@ export default {
 @media screen and (min-width: 768px) {
     .header{
         width:100%;
-        height:700px;
+        height:100px;
+        position: fixed;
+        top:0;
+        left:0;
     }
     .images{
         width:100%;
