@@ -5,7 +5,8 @@
      <span>{{formatNum}}</span>  
     <button @click="changnum('-')">-</button> -->
     <!-- <button @click="login">登录</button> -->
-    <DrivesLiscense />
+     <!-- <DrivesLiscense />   -->
+     <BigData />  
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import {mapState,mapMutations,mapActions,mapGetters} from 'vuex'
 import JSBridge from './utils/JSBridge.js';
 import DrivesLiscense from './component/driversLicense.vue'
+import BigData from './component/bigdata.vue'
 export default {
   name: 'app',
   data () {
@@ -21,7 +23,8 @@ export default {
     }
   },
   components:{
-    DrivesLiscense:DrivesLiscense
+    DrivesLiscense:DrivesLiscense,
+    BigData:BigData
   },
   computed:{
     ...mapState({

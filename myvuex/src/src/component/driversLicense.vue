@@ -9,7 +9,7 @@
                 <span>办理完成</span>
             </nav>
             <div class="image">
-                <img src="http://169.254.125.23:8082/banner@3x.png" />
+                <img src="http://169.254.125.23:8081/banner@3x.png" />
             </div>
             <div class="photo">
                 <dl>
@@ -40,12 +40,12 @@
                 </li>
                 <li>
                     <p>当前驾照签发城市</p>
-                    <p style="color:#999" @click="currentClick">请选择签发地</p>
+                    <p style="color:#999" @click="currentClick">{{text[0]}}</p>
                     
                 </li>
                  <li>
                     <p>可补换的签发城市  {{this.flag}}</p>
-                    <p style="color:#999" @click="replaceClick">请选择签发地</p>
+                    <p style="color:#999" @click="replaceClick">{{text1[0]}}</p>
                                
                 </li>
                 <li>
@@ -66,8 +66,11 @@
             </p>
 
             <button>立即支付</button>
-        </footer>
-        <div class="pick"  ><mt-picker :slots="slots" @change="onValuesChange"></mt-picker></div>
+        </footer> 
+       
+        <div class="pick" v-show="flag">
+             <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+        </div>
     </div>
 </template>
 
@@ -82,22 +85,14 @@ export default {
             slots: [
                 {
                     flex: 1,
-                    values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
+                    values: ['北京','山西','山东','河北','上海','杭州'],
                     className: 'slot1',
-                    textAlign: 'right'
-                }, {
-                    divider: true,
-                    content: '-',
-                    className: 'slot2'
-                }, {
-                    flex: 2,
-                    values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'],
-                    className: 'slot3',
-                    textAlign: 'left'
+                    textAlign: 'center'
                 }
             ],
             flag:false,
-            az:'shenhua'
+            text:'',
+            text1:''
         }
     },
     components:{
@@ -109,12 +104,14 @@ export default {
             if (values[0] > values[1]) {
                 picker.setSlotValue(1, values[0]);
             }
+            this.text = values
+            this.text1 = values
         },
         currentClick(){
             this.flag = true
         },
         replaceClick(){
-
+             
         }
     }
 }
@@ -146,6 +143,7 @@ export default {
 .section{
     flex:1;
     overflow: auto;
+    background: #eee;
 }
 .nav{
     width:100%;
@@ -154,6 +152,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     border-bottom:1px solid #F0F0EF;
+    background: #fff;
 }
 .nav>span{
     display: block;
@@ -182,6 +181,7 @@ export default {
     justify-content: space-around;
     align-items: center;
     padding:20px 0;
+    background: #fff;
 }
 .photo>dl{
     width:17%;
@@ -200,15 +200,21 @@ export default {
 .ulist{
     width:100%;
     height: auto;
+    margin-top:10px;
 }
 .ulist>li{
     width:100%;
     height:40px;
+    background: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding:10px;
     box-sizing: border-box;
+}
+.ulist>li:last-child{
+    margin-top:10px;
+    margin-bottom:10px; 
 }
 .footer{
     width:100%;
@@ -229,12 +235,12 @@ export default {
 }
 .pick{
     width:100%;
-    height:40px;
-    background: red;
+    height:100px;
+    /* background:rgba(0,0,0,.5); */
+    background: #fff;
     position: fixed;
     left:0;
     bottom:0px;
-    color:#000;
-    z-index:100;
+    z-index: 100;
 }
 </style>
