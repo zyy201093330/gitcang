@@ -1,7 +1,7 @@
 <template>
     <div class="license">
         
-        
+        asdsad
     </div>
 </template>
 

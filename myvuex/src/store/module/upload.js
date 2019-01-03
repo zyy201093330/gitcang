@@ -7,23 +7,23 @@ import demo5 from '@/assets/photo.png';
 const state = {
     list: [{
       src: '',
-      demo: demo1,
+      demo: 'http://169.254.125.23:8082/id-a.png',
       desc: '身份证正面'
     }, {
       src: '',
-      demo: demo2,
+      demo: 'http://169.254.125.23:8082/id-b.png',
       desc: '身份证反面'
     }, {
       src: '',
-      demo: demo3,
+      demo: 'http://169.254.125.23:8082/licence-a.png',
       desc: '驾驶证正页'
     }, {
       src: '',
-      demo: demo4,
+      demo: 'http://169.254.125.23:8082/licence-b.png',
       desc: '驾驶证副页'
     }, {
       src: '',
-      demo: demo5,
+      demo: 'http://169.254.125.23:8082/photo.png',
       desc: '白底半身照'
     }]
 }

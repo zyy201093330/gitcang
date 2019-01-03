@@ -13,7 +13,7 @@
             </nav>
             <div class="navlist"  @click="listShow">列表</div>
         </div>
-        <div class="images"><img src="http://localhost:8081/bigdata.png" /></div>
+        <div class="images"><img src="http://localhost:8082/bigdata.png" /></div>
     </div>
 </template>
 <script>
