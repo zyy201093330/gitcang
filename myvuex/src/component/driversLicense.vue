@@ -38,7 +38,7 @@
                 </li>
                  <li>
                     <p>可补换的签发城市  {{this.flag}}</p>
-                    <p style="color:#999" @click="replaceClick">{{text1[0]}}</p>
+                    <p style="color:#999" @click="replaceClick"> </p>
                                
                 </li>
                 <li>
@@ -62,7 +62,8 @@
         </footer> 
        
         <div class="pick" v-show="flag">
-             <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
+            <button>确定</button>
+            <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
         </div>
     </div>
 </template>
@@ -224,6 +225,7 @@ export default {
     align-items: center;
     padding:10px;
     box-sizing: border-box;
+    border-bottom:1px solid #ccc;
 }
 .ulist>li:last-child{
     margin-top:10px;
@@ -248,9 +250,9 @@ export default {
 }
 .pick{
     width:100%;
-    height:100px;
-    /* background:rgba(0,0,0,.5); */
-    background: #fff;
+    height:40px;
+    background: #ccc;
+    padding-bottom:100px;
     position: fixed;
     left:0;
     bottom:0px;
