@@ -26,40 +26,8 @@
                 </div>
                 </div>
             </ul>
-            <ul class="ulist">
-                <li @click="clickType">
-                    <p>服务类型</p>
-                    <p>
-                        <span>{{type}}</span>
-                        <span>﹥</span>
-                    </p >
-                </li>
-                <van-popup v-model="showType" position="bottom" overlay>
-                    <van-picker :columns="typeArray" @cancel="onCancel" show-toolbar title="请选择服务类型" @confirm="onConfirm"/>
-                </van-popup>
-                <li @click="currentClick">
-                    <p>当前驾照签发城市</p>
-                    <p style="color:#999" >{{text[0]}}-{{text[1]}}</p>
-                </li>
-                <van-popup v-model="iscity" position="bottom" overlay >
-                    <van-picker :columns="cityArray" ref="cityPicker" @change="cityChange" @cancel="cityCancel" show-toolbar title="请选择城市" @confirm="cityConfirm"/>
-                </van-popup>
-                <li @click="replaceClick">
-                    <p>可补换的签发城市</p>
-                    <p style="color:#999" >{{text1[0]}}-{{text1[1]}}</p>   
-                </li>
-                 <van-popup v-model="iscost" position="bottom" overlay>
-                    <van-picker :columns="cityArray" @cancel="costCancel" show-toolbar title="请选择城市" @confirm="costConfirm"/>
-                </van-popup>
-                <li>
-                    <p>服务费</p>
-                    <p>￥399</p>
-                </li>
-                <li>
-                    <p>优惠</p>
-                    <p>登陆后查看优惠券<span>></span></p>
-                </li>
-            </ul>
+             
+            <City />
             <a href="#">常见问题</a>
         </section>        
         <footer class="footer">
@@ -78,6 +46,9 @@ import Vue from 'vue'
 import {mapState, mapMutations} from 'vuex';
 import {uploadImg,cityList,costList} from '@/api/index';
 import add from '@/assets/add.png';
+import cityPicker from './citypicker'
+import City from './city'
+
 export default {
     data(){
         return {
@@ -96,9 +67,10 @@ export default {
             iscost:false
         }
     },
-    created(){
-        this.getCityList()
-       
+   
+    components:{
+        cityPicker,
+        City
     },
     computed:{
         ...mapState({
@@ -109,21 +81,6 @@ export default {
         }
     },
     methods:{
-        async getCityList(){
-            let res = await cityList();
-            res.data.forEach(i=>{
-                i.list.forEach(v=>{
-                    delete v.list
-                })
-            })
-            this.cityList = res.data
-            this.cityArray = [{
-                values:this.cityList.map(item => item.name)
-            },{
-                values:this.cityList[0].list.map(item => item.name)
-            }]
-            console.log(this.cityArray.values)
-        },
         async getCostList(){
             let res = await costList({
                 type:1,
@@ -147,52 +104,7 @@ export default {
         ...mapMutations({
             updataList: 'upload/upadteList'
         }),
-        cityChange(picker,values){
-            let index = this.cityList.findIndex(item=>item.name == values[0]);
-            this.cityArray[1].values = this.cityList[index].list.map(item=>item.name)
-            this.$refs.cityPicker.setColumnValues(1,this.cityList[index].list.map(item=>item.name))
-        },
-        onCancel(e){
-            this.showType = false;
-        },
-        cityCancel(){
-            this.iscity = false
-        },
-        costCancel(){
-            this.iscost = false
-        },
-        onConfirm(value){
-            this.type = value;
-            this.onCancel();
-            
-        },
-        cityConfirm(value){
-            this.text = value
-            this.getCostList()
-            this.cityCancel();
-        },
-        costConfirm(value){
-            this.text1 = value
-            this.costCancel();
-        },
-        clickType(){
-            this.showType = true;
-        },
-        onValuesChange(picker, values) {
-            console.log(values)
-            if (values[0] > values[1]) {
-                picker.setSlotValue(1, values[0]);
-            }
-            this.text = values
-            this.text1 = values
-        },
-        currentClick(){
-            this.iscity = true
-        },
-        replaceClick(){
-             this.iscost = true
-        },
-        click(index){
+         click(index){
             this.current = this.list[index];
             this.showMask = true;
         },
@@ -289,7 +201,7 @@ export default {
     border-bottom: .41rem solid #fff;
     border-left: .15rem solid #3AAFFC;
     top:0;
-    left:85px;
+    left:80px;
 }
 .bg{
     background: #3AAFFC;
@@ -305,26 +217,7 @@ export default {
     width:100%;
     height:100%;
 }
-.ulist{
-    width:100%;
-    height: auto;
-    margin-top:10px;
-}
-.ulist>li{
-    width:100%;
-    height:40px;
-    background: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding:10px;
-    box-sizing: border-box;
-    border-bottom:1px solid #ccc;
-}
-.ulist>li:last-child{
-    margin-top:10px;
-    margin-bottom:10px; 
-}
+
 .footer{
     width:100%;
     height:40px;
