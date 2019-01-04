@@ -3,13 +3,13 @@
         <header class="header"></header>
         <section class="section">
             <nav class="nav">
-                <span class="bg">订单提交</span>
-                <span>填写收货地址</span>
-                <span>正在办理</span>
-                <span>办理完成</span>
+                <p class="bg">订单提交 <span></span></p>
+                <p>填写收货地址</p>
+                <p>正在办理</p>
+                <p>办理完成</p>
             </nav>
             <div class="image">
-                <img src="http://169.254.125.23:8081/banner@3x.png" />
+                <img src="http://169.254.125.23:8082/banner@3x.png" />
             </div>
             <ul class="ulists">
                 <li v-for="(item, index) in list" :key="index" @click="click(index)">
@@ -27,20 +27,30 @@
                 </div>
             </ul>
             <ul class="ulist">
-                <li>
+                <li @click="clickType">
                     <p>服务类型</p>
-                    <p>换驾照<span>﹥</span></p>
+                    <p>
+                        <span>{{type}}</span>
+                        <span>﹥</span>
+                    </p >
                 </li>
-                <li>
+                <van-popup v-model="showType" position="bottom" overlay>
+                    <van-picker :columns="typeArray" @cancel="onCancel" show-toolbar title="请选择服务类型" @confirm="onConfirm"/>
+                </van-popup>
+                <li @click="currentClick">
                     <p>当前驾照签发城市</p>
-                    <p style="color:#999" @click="currentClick">{{text[0]}}</p>
-                    
+                    <p style="color:#999" >{{text[0]}}-{{text[1]}}</p>
                 </li>
-                 <li>
-                    <p>可补换的签发城市  {{this.flag}}</p>
-                    <p style="color:#999" @click="replaceClick"> </p>
-                               
+                <van-popup v-model="iscity" position="bottom" overlay >
+                    <van-picker :columns="cityArray" ref="cityPicker" @change="cityChange" @cancel="cityCancel" show-toolbar title="请选择城市" @confirm="cityConfirm"/>
+                </van-popup>
+                <li @click="replaceClick">
+                    <p>可补换的签发城市</p>
+                    <p style="color:#999" >{{text1[0]}}-{{text1[1]}}</p>   
                 </li>
+                 <van-popup v-model="iscost" position="bottom" overlay>
+                    <van-picker :columns="cityArray" @cancel="costCancel" show-toolbar title="请选择城市" @confirm="costConfirm"/>
+                </van-popup>
                 <li>
                     <p>服务费</p>
                     <p>￥399</p>
@@ -60,42 +70,35 @@
 
             <button>立即支付</button>
         </footer> 
-       
-        <div class="pick" v-show="flag">
-            <button>确定</button>
-            <mt-picker :slots="slots" @change="onValuesChange"></mt-picker>
-        </div>
     </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import {Picker} from 'mint-ui'
-import 'mint-ui/lib/style.css';
 import {mapState, mapMutations} from 'vuex';
-import {uploadImg} from '@/api/index';
+import {uploadImg,cityList,costList} from '@/api/index';
 import add from '@/assets/add.png';
-Vue.component(Picker.name, Picker)
 export default {
     data(){
         return {
-            slots: [
-                {
-                    flex: 1,
-                    values: ['北京','山西','山东','河北','上海','杭州'],
-                    className: 'slot1',
-                    textAlign: 'center'
-                }
-            ],
-            flag:false,
             text:'',
             text1:'',
             current:{},
-            showMask:false
+            showMask:false,
+            showType: false,
+            typeArray: ["补驾照", "换驾照"],
+            type: '换驾照',
+            cityList:[],
+            cityArray:[],
+            iscity:false,
+            costList:[],
+            costArray:[],
+            iscost:false
         }
     },
-    components:{
-
+    created(){
+        this.getCityList()
+       
     },
     computed:{
         ...mapState({
@@ -106,9 +109,75 @@ export default {
         }
     },
     methods:{
+        async getCityList(){
+            let res = await cityList();
+            res.data.forEach(i=>{
+                i.list.forEach(v=>{
+                    delete v.list
+                })
+            })
+            this.cityList = res.data
+            this.cityArray = [{
+                values:this.cityList.map(item => item.name)
+            },{
+                values:this.cityList[0].list.map(item => item.name)
+            }]
+            console.log(this.cityArray.values)
+        },
+        async getCostList(){
+            let res = await costList({
+                type:1,
+                city_id:12010000000,
+                pro_id:120
+            });
+            console.log(res)
+            res.data.forEach(i=>{
+               i.list.forEach(v=>{
+                   delete v.list
+               })
+            })
+            console.log(res)
+             this.cityList = res.data
+            this.cityArray = [{
+                values:this.cityList.map(item => item.name)
+            },{
+                values:this.cityList[0].list.map(item => item.name)
+            }]
+        },
         ...mapMutations({
             updataList: 'upload/upadteList'
         }),
+        cityChange(picker,values){
+            let index = this.cityList.findIndex(item=>item.name == values[0]);
+            this.cityArray[1].values = this.cityList[index].list.map(item=>item.name)
+            this.$refs.cityPicker.setColumnValues(1,this.cityList[index].list.map(item=>item.name))
+        },
+        onCancel(e){
+            this.showType = false;
+        },
+        cityCancel(){
+            this.iscity = false
+        },
+        costCancel(){
+            this.iscost = false
+        },
+        onConfirm(value){
+            this.type = value;
+            this.onCancel();
+            
+        },
+        cityConfirm(value){
+            this.text = value
+            this.getCostList()
+            this.cityCancel();
+        },
+        costConfirm(value){
+            this.text1 = value
+            this.costCancel();
+        },
+        clickType(){
+            this.showType = true;
+        },
         onValuesChange(picker, values) {
             console.log(values)
             if (values[0] > values[1]) {
@@ -118,10 +187,10 @@ export default {
             this.text1 = values
         },
         currentClick(){
-            this.flag = true
+            this.iscity = true
         },
         replaceClick(){
-             
+             this.iscost = true
         },
         click(index){
             this.current = this.list[index];
@@ -130,24 +199,37 @@ export default {
         cancel(){
             this.showMask = false;
         },
-        upload(type){
-            uploadImg(type).then(res=>{
-                if (res.code == 0){
-                    let src = '';
-                    if (/picture.eclicks.cn/.test(res.data.image01)) {
-                        src = res.data.image01.replace('http://', '//');
-                    } else {
-                        src = '//picture.eclicks.cn/' + res.data.image01;
-                    }
-                    this.updataList({
-                        src,
-                        index: this.list.findIndex(item=>item==this.current)
-                    })
-                }else{
-                    alert(res.msg);
-                }
-            })
-        }
+        async upload(type){
+            let res = await uploadImg(type);
+            if (res.result == 1){
+                this.updataList({
+                    src: res.data.url,
+                    index: this.list.findIndex(item=>item==this.current)
+                })
+                this.showMask = false;
+            }else{
+                alert('上传图片失败');
+            }
+            console.log('res...', res);
+        },
+        // upload(type){
+        //     uploadImg(type).then(res=>{
+        //         if (res.code == 0){
+        //             let src = '';
+        //             if (/picture.eclicks.cn/.test(res.data.image01)) {
+        //                 src = res.data.image01.replace('http://', '//');
+        //             } else {
+        //                 src = '//picture.eclicks.cn/' + res.data.image01;
+        //             }
+        //             this.updataList({
+        //                 src,
+        //                 index: this.list.findIndex(item=>item==this.current)
+        //             })
+        //         }else{
+        //             alert(res.msg);
+        //         }
+        //     })
+        // }
         
     }
 }
@@ -190,12 +272,24 @@ export default {
     border-bottom:1px solid #F0F0EF;
     background: #fff;
 }
-.nav>span{
+.nav>p{
     display: block;
     width:100%;
     height:100%;
     line-height: 40px;
     border-right:1px solid #F0F0EF;
+    position: relative;
+    margin-right:8px;
+}
+.nav>p:first-child::after{
+    content: '';
+    display: block;
+    position: absolute;
+    border-top: .41rem solid #fff;
+    border-bottom: .41rem solid #fff;
+    border-left: .15rem solid #3AAFFC;
+    top:0;
+    left:85px;
 }
 .bg{
     background: #3AAFFC;
