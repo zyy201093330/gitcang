@@ -5,7 +5,8 @@ import store from './store/store'
 import { Popup,Picker, } from 'vant';
  
 
-import Drive from './driversLicense/index'
+import Drive from './component/driversLicense'
+import FaqPage from './component/commonpro'
 
 Vue.use(VueRouter)
 Vue.use(Popup);
@@ -14,9 +15,13 @@ Vue.use(Picker);
 
 let routes = [
   {
-      path:'/home',
+      path:'/',
       name:'home',
       component:Drive
+  },
+  {
+    path: '/faq',
+    component: FaqPage
   }
 ]
 

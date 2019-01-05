@@ -28,7 +28,7 @@
             </ul>
              
             <City />
-            <a href="#">常见问题</a>
+            <router-link to="/faq">常见问题</router-link> 
         </section>        
         <footer class="footer">
             <p>

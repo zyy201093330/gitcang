@@ -5,8 +5,9 @@
      <span>{{formatNum}}</span>  
     <button @click="changnum('-')">-</button> -->
     <!-- <button @click="login">登录</button> -->
-     <DrivesLiscense />  
+ 
      <!-- <BigData />   -->
+     <router-view></router-view>
   </div>
 </template>
 
