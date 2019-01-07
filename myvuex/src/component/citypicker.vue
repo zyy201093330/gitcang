@@ -74,16 +74,7 @@ export default {
         }]
         console.log(this.cityArray.values)
         },
-        onCancel(e){
-            this.showType = false;
-        },
-        onConfirm(value){
-            this.type = value;
-            this.onCancel();    
-        },
-        clickType(){
-            this.showType = true;
-        },
+
         cityChange(picker,values){
             let index = this.cityList.findIndex(item=>item.name == values[0]);
             this.cityArray[1].values = this.cityList[index].list.map(item=>item.name)
@@ -125,24 +116,5 @@ export default {
 </script>
 
 <style>
-.ulist{
-    width:100%;
-    height: auto;
-    margin-top:10px;
-}
-.ulist>li{
-    width:100%;
-    height:40px;
-    background: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding:10px;
-    box-sizing: border-box;
-    border-bottom:1px solid #ccc;
-}
-.ulist>li:last-child{
-    margin-top:10px;
-    margin-bottom:10px; 
-}
+
 </style>

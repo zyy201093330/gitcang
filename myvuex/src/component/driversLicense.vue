@@ -26,7 +26,6 @@
                 </div>
                 </div>
             </ul>
-             
             <City />
             <router-link to="/faq">常见问题</router-link> 
         </section>        
@@ -35,7 +34,6 @@
                 实付：
                 <span>￥399</span>
             </p>
-
             <button>立即支付</button>
         </footer> 
     </div>
@@ -58,13 +56,7 @@ export default {
             showMask:false,
             showType: false,
             typeArray: ["补驾照", "换驾照"],
-            type: '换驾照',
-            cityList:[],
-            cityArray:[],
-            iscity:false,
-            costList:[],
-            costArray:[],
-            iscost:false
+            type: '换驾照'
         }
     },
    
@@ -251,6 +243,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: 10px;
+  background: #fff;
+  padding: 10px;
 }
 .ulists>li{
   display: flex;

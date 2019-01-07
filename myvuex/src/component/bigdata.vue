@@ -13,18 +13,32 @@
             </nav>
             <div class="navlist"  @click="listShow">列表</div>
         </div>
-        <div class="images"><img src="http://localhost:8082/bigdata.png" /></div>
+        <div class="images"><img src="http://localhost:8081/bigdata.png" /></div>
+        <div class="bigdata_section">
+            <div class="sec_left">
+                <div class="left_nav">
+                    <span>分析评论</span>
+                    <span>趋势榜单</span>
+                    <span>研究报告</span>
+                </div>
+            </div>
+            <div class="sec_right"></div>
+        </div>
+        <Echarts />
     </div>
 </template>
 <script>
-
+import echarts from 'echarts'
+import mbox from '../echarts/index.vue'
 export default {
     data(){
         return {
             flag:false
         }
     },
-  
+    components:{
+        Echarts:mbox
+    },
     mounted(){
         window.addEventListener("scroll", function(a){
             console.log('scrolling');
@@ -89,6 +103,30 @@ export default {
     }
     .nav>span:last-child{
         font-size:16px;
+    }
+    .bigdata_section{
+        width:100%;
+        height:auto;
+        display: flex;
+        padding:0 8%;
+    }
+    .sec_left{
+        width:50%;
+        height:auto;
+    }
+    .left_nav{
+        width:100%;
+        height:50px;
+        font-size:14px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .sec_right{
+        width:50%;
+        height:auto;
+        background: red;
     }
 }
 @media screen and (max-width: 963px) {

@@ -2,12 +2,11 @@
   <div id="app">
     <!-- <button @click="changnum('+')">+</button>
     <span>{{num}}</span>
-     <span>{{formatNum}}</span>  
+    <span>{{formatNum}}</span>  
     <button @click="changnum('-')">-</button> -->
     <!-- <button @click="login">登录</button> -->
- 
-     <!-- <BigData />   -->
-     <router-view></router-view>
+    <!-- <BigData />   -->
+    <router-view></router-view>
   </div>
 </template>
 

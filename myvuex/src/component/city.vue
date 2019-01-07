@@ -165,7 +165,7 @@ export default {
 }
 .ulist>li{
     width:100%;
-    height:40px;
+    height:50px;
     background: #fff;
     display: flex;
     justify-content: space-between;
