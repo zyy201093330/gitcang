@@ -25,6 +25,7 @@ function sendRequest(url, method = 'GET', data = {}) {
 
 import JSBridge from '@/utils/JSBridge.js';
 
+//上传图片
 export let uploadImg = (type)=>{
   return new Promise((resovel, reject)=>{
     JSBridge.invoke('device', 'chooseImage', {
@@ -36,9 +37,35 @@ export let uploadImg = (type)=>{
   })
 }
 
+// 唤起登陆
+export let doLogin = ()=>{
+  JSBridge.invoke('app', 'login', {
+    loginCallBackName: res=>window.location.reload()
+  });
+}
+
 //唤起分享
 export let doShare = ()=>{
   JSBridge.invoke('ui', 'shareMessage');
+}
+
+export let doPay = ()=>{
+  // pay.init({
+  //   order_url: /h5.chelun.com/.test(window.location.host) ? "//payproxy.eclicks.cn/Order/Create" : "//payproxy-test.eclicks.cn/Order/Create",
+  //   order_param: {
+  //     order_type: 50,
+  //     order_number: 'B7GT6NMV9JZPY',
+  //     ac_token: 'u29160213_369865473_SRMO7aws0w6rVeWt'
+  //   },
+  //   pay_channel: 'app',
+  //   callback_url:  "https://h5.chelun.com/2017/update-licence2/order.html"
+  // })
+  JSBridge.invoke('app', 'pay', {
+    price: 398.00,
+    orderNum: '6486849305969374209',
+    channels: ["weixin","alipay","baidu"],
+    callbackUrl: "https://h5.chelun.com/2017/update-licence2/order.html"
+  });
 }
 
 // 获取驾照签发城市
