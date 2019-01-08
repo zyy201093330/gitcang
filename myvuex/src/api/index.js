@@ -36,6 +36,11 @@ export let uploadImg = (type)=>{
   })
 }
 
+//唤起分享
+export let doShare = ()=>{
+  JSBridge.invoke('ui', 'shareMessage');
+}
+
 // 获取驾照签发城市
 export let cityList = ()=>{
   return sendRequest('/api/ExchangeJiaZhao/cityList');
