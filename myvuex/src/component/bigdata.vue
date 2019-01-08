@@ -176,5 +176,25 @@ export default {
         box-sizing: border-box;
         padding-right:10px;
     }
+    .bigdata_section{
+        width:100%;
+        height:auto;
+    }
+    .sec_left{
+        width:100%;
+        height:auto;
+    }
+    .left_nav{
+        width:100%;
+        height:50px;
+        font-size:16px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:0 10px;
+        box-sizing: border-box;
+    }
+ 
 }
 </style>

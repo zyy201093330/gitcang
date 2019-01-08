@@ -2,12 +2,6 @@
     <div class="drive">
         <header class="header"></header>
         <section class="section">
-            <nav class="nav">
-                <p class="bg">订单提交 <span></span></p>
-                <p>填写收货地址</p>
-                <p>正在办理</p>
-                <p>办理完成</p>
-            </nav>
             <div class="image">
                 <img src="http://169.254.125.23:8082/banner@3x.png" />
             </div>

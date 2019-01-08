@@ -6,15 +6,14 @@
     <button @click="changnum('-')">-</button> -->
     <!-- <button @click="login">登录</button> -->
     <!-- <BigData />   -->
-    <router-view></router-view>
+    <Home /> 
   </div>
 </template>
 
 <script>
 import {mapState,mapMutations,mapActions,mapGetters} from 'vuex'
 import JSBridge from './utils/JSBridge.js';
-import DrivesLiscense from './component/driversLicense.vue'
-import BigData from './component/bigdata.vue'
+import Home from './component/home'
 export default {
   name: 'app',
   data () {
@@ -23,8 +22,7 @@ export default {
     }
   },
   components:{
-    DrivesLiscense:DrivesLiscense,
-    BigData:BigData
+    Home
   },
   computed:{
     ...mapState({

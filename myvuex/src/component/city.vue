@@ -173,6 +173,7 @@ export default {
     padding:10px;
     box-sizing: border-box;
     border-bottom:1px solid #ccc;
+    font-size:18px;
 }
 .ulist>li:last-child{
     margin-top:10px;
