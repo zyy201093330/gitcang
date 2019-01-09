@@ -42,11 +42,10 @@
 <script>
 import Vue from 'vue'
 import {mapState, mapMutations} from 'vuex';
-import {uploadImg,cityList,costList} from '@/api/index';
+import {uploadImg,cityList,costList,uploadBase64} from '@/api/index';
 import add from '@/assets/add.png';
 import cityPicker from './citypicker'
 import City from './city'
-import {uploadBase64} from '@/api/index'
 
 export default {
     data(){
@@ -100,9 +99,6 @@ export default {
           // 绘制一张网络图片
           var img2 = new Image();
           img2.crossOrigin = 'anonymous'
-          var url = 'http://123.206.55.50:11000/static/9c5ab5222bb94e9beec79ded.jpg';
-          let data = await imageToBase64(url)
-          console.log('data...', data);
           img2.src = 'data:image/jpeg;base64,'+data;
           img2.onload = async ()=>{
             context.drawImage(img2, 0, 0, img2.width, img2.height, 50, 50, img2.width/2, img2.height/2);

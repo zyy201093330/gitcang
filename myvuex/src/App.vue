@@ -6,7 +6,8 @@
     <button @click="changnum('-')">-</button> -->
     <!-- <button @click="login">登录</button> -->
     <!-- <BigData />   -->
-    <Home /> 
+    <!-- <Home />  -->
+    <upimg />
   </div>
 </template>
 
@@ -14,6 +15,7 @@
 import {mapState,mapMutations,mapActions,mapGetters} from 'vuex'
 import JSBridge from './utils/JSBridge.js';
 import Home from './component/home'
+import Upimg from './component/uploadimg'
 export default {
   name: 'app',
   data () {
@@ -22,7 +24,8 @@ export default {
     }
   },
   components:{
-    Home
+    Home,
+    Upimg
   },
   computed:{
     ...mapState({
