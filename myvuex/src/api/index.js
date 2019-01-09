@@ -49,17 +49,12 @@ export let doShare = ()=>{
   JSBridge.invoke('ui', 'shareMessage');
 }
 
+// 上传base64
+export let uploadBase64 = (base64)=>{
+  return sendRequest('http://123.206.55.50:11000/upload_base64', 'POST', {base64})
+}
+
 export let doPay = ()=>{
-  // pay.init({
-  //   order_url: /h5.chelun.com/.test(window.location.host) ? "//payproxy.eclicks.cn/Order/Create" : "//payproxy-test.eclicks.cn/Order/Create",
-  //   order_param: {
-  //     order_type: 50,
-  //     order_number: 'B7GT6NMV9JZPY',
-  //     ac_token: 'u29160213_369865473_SRMO7aws0w6rVeWt'
-  //   },
-  //   pay_channel: 'app',
-  //   callback_url:  "https://h5.chelun.com/2017/update-licence2/order.html"
-  // })
   JSBridge.invoke('app', 'pay', {
     price: 398.00,
     orderNum: '6486849305969374209',

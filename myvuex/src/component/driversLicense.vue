@@ -22,6 +22,12 @@
             </ul>
             <City />
             <router-link to="/faq">常见问题</router-link> 
+            <div>
+            <input type="file" @change="fileUpload">
+            图片上传
+            </div>
+            <img :src="src">
+            <canvas id="canvas"></canvas>
         </section>        
         <footer class="footer">
             <p>
@@ -40,6 +46,7 @@ import {uploadImg,cityList,costList} from '@/api/index';
 import add from '@/assets/add.png';
 import cityPicker from './citypicker'
 import City from './city'
+import {uploadBase64} from '@/api/index'
 
 export default {
     data(){
@@ -50,7 +57,8 @@ export default {
             showMask:false,
             showType: false,
             typeArray: ["补驾照", "换驾照"],
-            type: '换驾照'
+            type: '换驾照',
+            src: ''
         }
     },
    
@@ -67,6 +75,50 @@ export default {
         }
     },
     methods:{
+          async fileUpload(e){
+      console.log('e.target...', e.target.files)
+      let reader = new FileReader();
+      // 判断图片是否过多
+      if (e.target.files[0].size > 1024*300){
+
+      }
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = ()=>{
+        this.src = reader.result;
+        console.log('reader.result...', reader.result);
+         var img = new Image();
+         img.src = reader.result;
+         img.onload = async ()=>{
+           console.log(img.width, img.height);
+           var canvas = document.getElementById('canvas');
+           var context = canvas.getContext('2d');
+           canvas.width = img.width;
+           canvas.height = img.height;
+           // 压缩画布
+          context.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width/2, img.height/2);
+
+          // 绘制一张网络图片
+          var img2 = new Image();
+          img2.crossOrigin = 'anonymous'
+          var url = 'http://123.206.55.50:11000/static/9c5ab5222bb94e9beec79ded.jpg';
+          let data = await imageToBase64(url)
+          console.log('data...', data);
+          img2.src = 'data:image/jpeg;base64,'+data;
+          img2.onload = async ()=>{
+            context.drawImage(img2, 0, 0, img2.width, img2.height, 50, 50, img2.width/2, img2.height/2);
+             // toDataUrl时，设置为jpeg或者图片质量
+            var baseStr1 = canvas.toDataURL('image/jpeg', 0.7);
+            var baseStr2 = canvas.toDataURL('image/png', 1);
+            // console.log(baseStr1, baseStr2);
+            let res1 = await uploadBase64(baseStr1);
+            let res2 = await uploadBase64(baseStr2);
+            console.log('res1...', res1, 'res2...', res2);
+          }
+          //  console.log(canvas.toDataURL());
+         }
+      }
+    }
+        ,
         async getCostList(){
             let res = await costList({
                 type:1,
