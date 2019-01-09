@@ -54,6 +54,11 @@ export let uploadBase64 = (base64)=>{
   return sendRequest('http://123.206.55.50:11000/upload_base64', 'POST', {base64})
 }
 
+//转base64
+export let imgToBase64 = (url) => {
+  return sendRequest('http://123.206.55.50:11000/tobase64','POST',{url})
+}
+
 export let doPay = ()=>{
   JSBridge.invoke('app', 'pay', {
     price: 398.00,
