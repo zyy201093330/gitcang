@@ -2,7 +2,10 @@ const host = /localhost/.test(window.location.host)?'https://h5.chelun.com':'htt
 
 function sendRequest(url, method = 'GET', data = {}) {
   let params = {
-      method
+      method,
+      headers:{
+        'content-type':'application/json'
+      }
   };
   // 判断如果是一个post请求，带上请求体信息
   if (method == 'POST') {
@@ -55,8 +58,12 @@ export let uploadBase64 = (base64)=>{
 }
 
 //转base64
-export let imgToBase64 = (url) => {
-  return sendRequest('http://123.206.55.50:11000/tobase64','POST',{url})
+// export let imgToBase64 = (url) => {
+//   return sendRequest('http://123.206.55.50:11000/tobase64','POST',{url})
+// }
+export let imgToBase64 = (url)=>{
+  console.log(url)
+  return sendRequest('http://123.206.55.50:11000/tobase64', 'POST', {url})
 }
 
 export let doPay = ()=>{
