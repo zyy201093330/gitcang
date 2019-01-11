@@ -5,8 +5,9 @@ export function loginByUsername(username, password) {
     username,
     password
   }
+  console.log(data)
   return request({
-    url: '/login/login',
+    url: '/users/login',
     method: 'post',
     data
   })
@@ -26,4 +27,3 @@ export function getUserInfo(token) {
     params: { token }
   })
 }
-
