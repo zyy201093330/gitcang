@@ -60,7 +60,7 @@ const user = {
 
             // 设置权限,用户名,头像,简介
             commit('SET_ROLES', ['admin'])
-            commit('SET_NAME', 'zhangyongyi')
+            commit('SET_NAME', '张永毅')
             commit('SET_AVATAR', 'https://avatars1.githubusercontent.com/u/8192412?s=460&v=4')
             commit('SET_INTRODUCTION', 'data.introduction')
           }else{

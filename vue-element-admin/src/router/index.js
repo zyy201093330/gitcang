@@ -11,6 +11,7 @@ import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
+import user from './modules/user'
 
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -89,6 +90,7 @@ export const constantRouterMap = [
       }
     ]
   },
+  user,
   {
     path: '/guide',
     component: Layout,
@@ -161,7 +163,6 @@ export const asyncRouterMap = [
   chartsRouter,
   nestedRouter,
   tableRouter,
-
   {
     path: '/example',
     component: Layout,
