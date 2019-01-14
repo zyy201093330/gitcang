@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import {Message} from 'element-ui'
+import {mapState,mapMutations} from 'vuex'
   export default {
     data() {
       return {
@@ -59,7 +61,18 @@
         search: ''
       }
     },
+    computed:{
+      ...mapState({
+        list:state=>state.base.list
+      })
+    },
+    created(){
+      console.log(this)
+    },
     methods: {
+      ...mapMutations({
+        getuserlist:'base/getuserlist'
+      }),
       handleEdit(index, row) {
         console.log(index, row);
       },
