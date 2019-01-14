@@ -1,16 +1,37 @@
+import {getUserList} from '@/api/list'
+
 const state = {
-    userlist:[]
+  list: [],
+  current: 1
 }
 
 const mutations = {
-    getuserlist(state,action){
-        let res = fetch('http://123.206.55.50:15000/users/list').then(res=>res.json()).then(res=>res)
-        console.log(res)
+  updateList(state, list){
+    state.list = list;
+  }
+}
 
-    }
+const actions = {
+  // 获取用户列表
+  GetUserList({commit}, query){
+    return new Promise((resolve, reject)=>{
+      getUserList(query).then(res=>{
+        if (res.data.code == 1){
+          commit('updateList', res.data.data.list)
+          resolve();
+        }else{
+          reject();
+        }
+      }).catch(err=>{
+        reject(err);
+      })
+    })
+  }
 }
 
 export default {
-    state,
-    mutations
+  namespaced: true,
+  state,
+  actions,
+  mutations
 }
