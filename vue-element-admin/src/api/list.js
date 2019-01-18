@@ -1,4 +1,3 @@
-
 import request from '@/utils/request'
 
 export function getUserList(search = []) {
@@ -11,3 +10,12 @@ export function getUserList(search = []) {
     method: 'get'
   })
 }
+
+export function updateUserInfo(data){
+  return request({
+    url:'/users/update',
+    method:'post',
+    data
+  })
+}
+

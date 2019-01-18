@@ -1,6 +1,5 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { loginByUsername, logout, register, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { Message } from 'element-ui'
 import md5 from 'md5';
 
 const user = {
@@ -51,48 +50,50 @@ const user = {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, md5(userInfo.password+'1605A')).then(response => {
-          console.log('response...', response);
-          let {data} = response;
-          if (data.code == 1){
-            commit('SET_TOKEN', response.data.data.token)
-            setToken(response.data.data.token)
-            resolve()
-
-            // 设置权限,用户名,头像,简介
-            commit('SET_ROLES', ['admin'])
-            commit('SET_NAME', '张永毅')
-            commit('SET_AVATAR', 'https://avatars1.githubusercontent.com/u/8192412?s=460&v=4')
-            commit('SET_INTRODUCTION', 'data.introduction')
-          }else{
-            reject(response.data.msg)
-            Message.error(response.data.msg)
-          }
+          // console.log('response...', response, md5(userInfo.password+'1605A'));
+          commit('SET_TOKEN', response.data.data.token)
+          setToken(response.data.data.token)
+          resolve()
         }).catch(error => {
           reject(error)
         })
       })
     },
-
+    // 用户注册
+    registerByUserName({commit}, userInfo){
+      return new Promise((resolve, reject)=>{
+        let {username, password, phone} = userInfo;
+        register(username, md5(password+'1606A'), phone).then(response=>{
+          console.log('response...', response);
+          if (response.data.code == 1){
+            commit('SET_TOKEN', 'admin')
+            setToken('admin')
+            resolve()
+          }else{
+            reject(response.data.msg)
+          }
+        })
+      })
+    },
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getUserInfo(state.token).then(response => {
-          // 由于mockjs 不支持自定义状态码只能这样hack
-          if (!response.data) {
+        getUserInfo().then(response => {
+          console.log('response...', response);
+          if (response.data.code == 1){
+            if (response.data.data.access && response.data.data.access.length > 0) { // 验证返回的roles是否是一个非空数组
+              commit('SET_ROLES', response.data.data.access)
+            } else {
+              reject('getInfo: roles must be a non-null array!')
+            }
+
+            commit('SET_NAME', response.data.data.username)
+            commit('SET_AVATAR', response.data.data.avatar)
+            commit('SET_INTRODUCTION', response.data.data.profile)
+            resolve({data: {roles: response.data.data.access}})
+          }else{
             reject('Verification failed, please login again.')
           }
-          const data = response.data
-
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array!')
-          }
-
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
-          resolve(response)
         }).catch(error => {
           reject(error)
         })

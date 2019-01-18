@@ -1,4 +1,4 @@
-import {getUserList} from '@/api/list'
+import {getUserList,updateUserInfo} from '@/api/list'
 
 const state = {
   list: [],
@@ -12,7 +12,6 @@ const mutations = {
 }
 
 const actions = {
-  // 获取用户列表
   GetUserList({commit}, query){
     return new Promise((resolve, reject)=>{
       getUserList(query).then(res=>{
@@ -24,6 +23,20 @@ const actions = {
         }
       }).catch(err=>{
         reject(err);
+      })
+    })
+  },
+  GetUserUpdate({commit},data){
+    return new Promise((resolve,reject)=>{
+      updateUserInfo(data).then(res=>{
+        console.log(res)
+        if (res.data.code == 1){
+          resolve(res.data.msg);
+        }else{
+          reject(res.data.msg);
+        }
+      }).catch(error=>{
+        
       })
     })
   }

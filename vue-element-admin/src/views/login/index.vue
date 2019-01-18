@@ -38,6 +38,7 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+      <el-button type="primary" style="width:100%;margin-bottom:30px;margin-left:0;" @click.native.prevent="handleRegister">{{ $t('login.register') }}</el-button>
 
       <div style="position:relative">
         <div class="tips">
@@ -68,6 +69,7 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
+
 export default {
   name: 'Login',
   components: { LangSelect, SocialSign },
@@ -79,13 +81,6 @@ export default {
         callback()
       }
     }
-    const username = (rule, value, callback)=>{
-      if (value.length < 3){
-        callback(new Error('The username can not be less that 3'))
-      }else{
-        callback();
-      }
-    }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('The password can not be less than 6 digits'))
@@ -93,13 +88,20 @@ export default {
         callback()
       }
     }
+    const username = (rule, value, callback) => {
+      if (value.length < 5){
+        callback(new Error('用户名长度必须大于5'))
+      }else{
+        callback()
+      }
+    }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        username: 'zhangyongyi',
+        password: 'abc123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur'}, {trigger: 'blur', validator: username}],
+        username: [{ required: true, trigger: 'blur' }, {trigger: 'blur', validator: username}],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
@@ -146,6 +148,9 @@ export default {
         }
       })
     },
+    handleRegister(){
+      this.$router.replace('/register')
+    },
     afterQRScan() {
       // const hash = window.location.hash.slice(1)
       // const hashObj = getQueryObject(hash)
@@ -171,9 +176,11 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
   /* 修复input 背景不协调 和光标变色 */
   /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+
   $bg:#283443;
   $light_gray:#eee;
   $cursor: #fff;
+
   @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
     .login-container .el-input input{
       color: $cursor;
@@ -182,6 +189,7 @@ export default {
       }
     }
   }
+
   /* reset element-ui css */
   .login-container {
     .el-input {
@@ -216,6 +224,7 @@ export default {
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+
 .login-container {
   min-height: 100%;
   width: 100%;

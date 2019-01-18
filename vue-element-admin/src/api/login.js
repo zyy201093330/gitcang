@@ -5,14 +5,12 @@ export function loginByUsername(username, password) {
     username,
     password
   }
-  console.log(data)
   return request({
     url: '/users/login',
     method: 'post',
     data
   })
 }
-
 export function logout() {
   return request({
     url: '/login/logout',
@@ -20,10 +18,21 @@ export function logout() {
   })
 }
 
-export function getUserInfo(token) {
+export function getUserInfo() {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/users/info',
+    method: 'get'
+  })
+}
+
+export function register(username, password, phone){
+  return request({
+    url: '/users/register',
+    method: 'post',
+    data: {
+      username,
+      password,
+      phone
+    }
   })
 }
