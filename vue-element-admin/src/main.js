@@ -32,6 +32,7 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 import Vcharts from 'v-charts'
+Vue.use(Vcharts)
 // 挂载全局自定义过滤器
 // register global utility filters.
 Object.keys(filters).forEach(key => {

@@ -1,5 +1,6 @@
-<template>
+ <template>
   <div>
+    <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="document" @click="handleDownload">{{ $t('excel.export') }} Excel</el-button>
     <el-table
       :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       style="width: 100%">
@@ -12,6 +13,13 @@
         prop="avatar">
          <template slot-scope="scope">
           <img :src="scope.row.avatar" class="user-avatar"/>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="createTime"
+        prop="avatar">
+         <template slot-scope="scope">
+          <span>{{scope.row.create_time}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -90,7 +98,8 @@
         <el-form-item v-if="type=='edit'" label="头像" prop="avatar">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://123.206.55.50:11000/upload"
+            :on-success="uploadSuccess"
             :show-file-list="false">
             <img v-if="current.avatar" :src="current.avatar" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -159,6 +168,7 @@
         myTag: [],
         search: '',
         current: {},
+        downloadLoading: false,
         rules: {
           phone: [{trigger: 'blur', validator: phoneValidate}],
           username: [{trigger:'blur', required: 'true'}],
@@ -183,6 +193,35 @@
         deleteUser: 'list/DeleteUser',
         modifyRule: 'list/ModifyRule'
       }),
+      uploadSuccess(response, file, filelist){
+        console.log('response....', response, file, filelist);
+        if (response.code == 1){
+          this.current.avatar = response.data[0].path;
+        }else{
+           this.$message({
+            message: response.msg,
+            type: 'error'
+          });
+        }
+      },
+      handleDownload(){
+        this.downloadLoading = true
+        import('@/vendor/Export2Excel').then(excel => {
+          const tHeader = ['ID', 'cretaTime', 'Avatar', 'userName', 'Email', 'Address', 'Phone', 'Roler', 'Access']
+          const data = this.tableData.map((item)=>{
+            let {id, create_time, avatar, username, email, address, phone, rolers, access} = item;
+            return [id, create_time, avatar, username, email, address, phone, rolers, access];
+          })
+          excel.export_json_to_excel({
+            header: tHeader,
+            data,
+            filename: '用户数据',
+            autoWidth: 'auto',
+            bookType: 'xlsx'
+          })
+          this.downloadLoading = false
+        })
+      },
       loadData(page){
         this.currentPage = page;
         console.log('page...', page);
@@ -224,8 +263,8 @@
         if (this.type == 'edit'){
           this.$refs.ruleForm.validate(valid=>{
             if (valid){
-              let {id, username, address, email, phone} = this.current;
-              this.updateUserInfo({id,username,address,email,phone}).then(res=>{
+              let {id, username, avatar, address, email, phone} = this.current;
+              this.updateUserInfo({id,avatar,username,address,email,phone}).then(res=>{
                 this.$message({
                   message: res,
                   type: 'success'

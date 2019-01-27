@@ -1,5 +1,3 @@
-/** When your routing table is too long, you can split it into small modules**/
-
 import Layout from '@/views/layout/Layout'
 
 const userRouter = {
@@ -11,12 +9,16 @@ const userRouter = {
     title: 'Organize',
     icon: 'table'
   },
-  children: [
-    {
-      path: 'coding',
+  children: [{
+      path: 'index',
       component: () => import('@/views/organize/index'),
+      name: 'Index',
+      meta: {title: 'OrganizeList'}
+    },{
+      path: 'coding',
+      component: () => import('@/views/organize/codeing'),
       name: 'Coding',
-      meta: { title: 'Coding',roles: ['coding'] }
+      meta: { title: 'Coding' }
     },{
       path: 'review',
       component: () => import('@/views/organize/index'),
